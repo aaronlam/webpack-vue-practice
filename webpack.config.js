@@ -3,6 +3,7 @@ var webpack = require("webpack");
 
 module.exports = {
   entry: ["babel-polyfill", "./src/main.js"], // 项目入口，webpack会从该入口开始，把所有依赖的资源都加载打包
+  devtool: "#cheap-module-eval-source-map", // map调试文件的生成模式，生产一般使用cheap-module-source-map模式，而开发一般使用cheap-module-eval-source-map。cheap不生成列信息（一般引擎会提供）提升map文件生成效率，module为了支持babel的预构建loader，eval则为了提升持续构建的效率（但会损失应用一定的运行性能）
   output: {
     path: path.resolve(__dirname, "./dist"), // 项目打包后的文件路径
     publicPath: "/dist/", // 通过devServer访问的路径
