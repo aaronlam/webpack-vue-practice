@@ -5,6 +5,15 @@ import Vue from "vue";
 import getData from "./util";
 import "./style/common.scss";
 
+Vue.component("my-component", {
+  template: '<img :src="url" />',
+  data() {
+    return {
+      url: require("./img/AM.jpg"),
+    };
+  },
+});
+
 // say();
 var app = new Vue({
   el: "#app",
