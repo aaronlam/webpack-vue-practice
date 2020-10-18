@@ -55,8 +55,9 @@ module.exports = {
     },
   },
   resolve: {
-    alias: {
-      vue$: "vue/dist/vue.esm.js",
-    },
+    // 这里会影响到dllplugin的效果，会造成dll打一次，prod也打一次vue的包，造成重复打包
+    // alias: {
+    //   vue$: "vue/dist/vue.esm.js",
+    // },
   },
 };

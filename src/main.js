@@ -33,15 +33,15 @@ import "./style/common.scss";
 // });
 
 // compiler（模板）模式
-new Vue({
-  el: "#app",
-  template: "<App/>",
-  components: { App },
-});
-
-// runtime（运行时）模式
 // new Vue({
-//   render: function(h) {
-//     return h(App);
-//   },
-// }).$mount("#app");
+//   el: "#app",
+//   template: "<App/>",
+//   components: { App },
+// });
+
+//runtime（运行时）模式
+new Vue({
+  render: function(h) {
+    return h(App);
+  },
+}).$mount("#app");
