@@ -1,34 +1,37 @@
-var path = require("path");
-var webpack = require("webpack");
-var HtmlWebpackPlugin = require("html-webpack-plugin");
-var VueLoaderPlugin = require("vue-loader/lib/plugin");
+const path = require("path");
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const VueLoaderPlugin = require("vue-loader/lib/plugin");
+const HappyPack = require("happypack");
+const os = require("os");
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 module.exports = {
   entry: {
     main: ["babel-polyfill", "./src/main.js"],
-  }, // 项目入口，webpack会从该入口开始，把所有依赖的资源都加载打包
+  }, // 项目入口，webpack会从该入口开始，把所有依赖的资源都加载打包（value为数组时webpack把从左至右的优先级按次序打包文件代码）
   output: {
     path: path.resolve(__dirname, "./dist"), // 项目打包后的文件路径
-    filename: "[name].js", // 打包后的文件名
+    filename: "[name].[hash:8].js", // 打包后的文件名
+    chunkFilename: "[name].[hash:8].js", // chunk打包后的文件名
+    // publicPath: 'https://cdn.example.com/' // 如果静态文件放在了cdn，css图片路径自动添加前缀
   },
   module: {
+    //noParse: '/jquery|loadash/', // 不去解析这些没有依赖的库
     rules: [
       {
+        test: /\.vue$/,
+        loader: "vue-loader",
+      },
+      // {
+      //   test: /\.js$/,
+      //   loader: "babel-loader",
+      //   exclude: /node_modules/, // 忽略node_modules文件夹下的文件，不用转码
+      // },
+      {
         test: /\.js$/,
-        loader: "babel-loader",
-        exclude: /node_modules/, // 忽略node_modules文件夹下的文件，不用转码
-      },
-      {
-        test: /\.css$/,
-        use: ["vue-style-loader", "css-loader"],
-      },
-      {
-        test: /\.scss$/,
-        use: ["vue-style-loader", "css-loader", "sass-loader"],
-      },
-      {
-        test: /\.sass$/,
-        use: ["vue-style-loader", "css-loader", "sass-loader?indentedSyntax"],
+        loader: "happypack/loader?id=happyBabel", // 把js文件处理交给id为happyBabel的happypack的实例执行
+        exclude: /node_modules/,
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
@@ -37,23 +40,25 @@ module.exports = {
           name: "[name].[ext]?[hash]",
         },
       },
-      {
-        test: /\.vue$/,
-        loader: "vue-loader",
-      },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/index.html",
+      template: "./src/index.html", // html模板位置
     }),
-    new VueLoaderPlugin(), // 它的职责是将你定义过的其它规则复制并应用到 .vue 文件里相应语言的
+    new VueLoaderPlugin(), // 它的职责是将你定义过的其它规则复制并应用到vue文件里相应语言的
+    new HappyPack({
+      id: "happyBabel", // 与loader对应的id标识
+      // 用法和loader配置一样，这里是loaders
+      loaders: [
+        {
+          loader: "babel-loader?cacheDirectory=true",
+        },
+      ],
+      threadPool: happyThreadPool, // 共享进程池
+      verbose: true, // 输出日志
+    }),
   ],
-  optimization: {
-    splitChunks: {
-      chunks: "all",
-    },
-  },
   resolve: {
     // 这里会影响到dllplugin的效果，会造成dll打一次，prod也打一次vue的包，造成重复打包
     // alias: {

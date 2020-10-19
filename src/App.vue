@@ -18,7 +18,7 @@ export default {
   },
   created() {
     this.fetchData();
-    console.log("12345");
+    console.log("aaronlam");
   },
   methods: {
     async fetchData() {
@@ -34,7 +34,7 @@ export default {
   font-family: "Avenir", Helvetic, Arial, sans-serif;
 
   h1 {
-    color: green;
+    color: black;
   }
 }
 </style>
