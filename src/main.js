@@ -4,7 +4,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 // import getData from "./util";
-import "./style/common.scss";
+//import "./style/common.scss";
 
 // Vue.component("my-component", {
 //   template: '<img :src="url" />',
