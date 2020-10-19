@@ -15,7 +15,13 @@ const BundleAnalyzerWebpackPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
 
 const prodConfig = {
-  mode: "production", // production模式下webpack会自动压缩代码
+  /*
+    要想使tree shaking生效，生成的代码必须是ES6模块。
+    不能使用其它类型的模块如CommonJS之流。
+    如果使用Babel的话，这里有一个小问题，因为Babel的预案（preset）默认会将任何模块类型都转译成CommonJS类型。
+    修正这个问题也很简单，在.babelrc文件或在webpack.config.js文件中设置modules： false即可
+  */
+  mode: "production", // production模式下webpack会自动压缩代码和进行tree shaking
   devtool: "cheap-module-source-map", // 生产环境使用cheap-module-source-map
   module: {
     rules: [
