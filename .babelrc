@@ -3,7 +3,7 @@
     [
       "env",
       {
-        "modules": false
+        "modules": false // 防止babel把esm转成cjs导致webpack4 production模式下的tree shaking失效
       }
     ],
     "stage-3"

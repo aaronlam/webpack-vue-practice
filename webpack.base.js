@@ -21,7 +21,8 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/,
-        loader: "vue-loader",
+        //loader: "vue-loader",
+        use: ["cache-loader", "vue-loader"], // cache-loader做了和babel-loader?cacheDireactory=true开启cache之后做的事情一样（将loader的编译结果写入硬盘缓存。再次构建会先比较一下，如果文件较之前的没有发生变化则会直接使用缓存）
       },
       // {
       //   test: /\.js$/,
@@ -64,5 +65,8 @@ module.exports = {
     // alias: {
     //   vue$: "vue/dist/vue.esm.js",
     // },
+  },
+  externals: {
+    //jquery: "jQuery", // 如果我们想引用一个库，但是又不想让webpack打包，并且又不影响我们在程序中以CMD、AMD或者window/global全局等方式进行使用，那就可以通过配置Externals
   },
 };
