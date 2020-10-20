@@ -11,3 +11,6 @@ Webpack Vue Practice
 7. upgrade webpack 3 to 4 version
 8. add dev dll prod webpack config
 9. split code
+10. add build copy public directory file
+11. promote build speed
+12. write loader
