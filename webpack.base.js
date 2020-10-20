@@ -55,6 +55,9 @@ module.exports = {
         {
           loader: "babel-loader?cacheDirectory=true",
         },
+        {
+          loader: path.resolve(__dirname, "drop-console-loader.js"), // 自己编写用于去除代码中console的loader
+        },
       ],
       threadPool: happyThreadPool, // 共享进程池
       verbose: true, // 输出日志
