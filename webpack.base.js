@@ -35,7 +35,7 @@ module.exports = {
       // },
       {
         test: /\.js$/,
-        use: ["cache-loader", "happypack/loader?id=happyBabel"], // 把js文件处理交给id为happyBabel的happypack的实例执行
+        use: ["happypack/loader?id=happyBabel"], // 把js文件处理交给id为happyBabel的happypack的实例执行
         exclude: /node_modules/,
       },
       {
