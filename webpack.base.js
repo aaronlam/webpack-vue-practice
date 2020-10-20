@@ -4,6 +4,7 @@ const webpack = require("webpack");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const AddAssetHtmlWebpackPlugin = require("add-asset-html-webpack-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 const HappyPack = require("happypack");
@@ -57,6 +58,12 @@ module.exports = {
     ]),
     new HtmlWebpackPlugin({
       template: "./src/index.html", // html模板位置
+    }),
+    new AddAssetHtmlWebpackPlugin({
+      filepath: path.resolve(__dirname, "./dll/*.dll.js"), // 把dll.js加进index.html里，并且拷贝文件到dist目录
+    }),
+    new webpack.DllReferencePlugin({
+      manifest: path.resolve(__dirname, "./dll/vendors.manifest.json"), // 读取dll打包后的manifest.json，分析需要跳过哪些库代码
     }),
     new VueLoaderPlugin(), // 它的职责是将你定义过的其它规则复制并应用到vue文件里相应语言的
     new HappyPack({
