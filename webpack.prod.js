@@ -5,11 +5,9 @@ const webpack = require("webpack");
 const merge = require("webpack-merge");
 const baseConfig = require("./webpack.base");
 
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ManifestWebpackPlugin = require("webpack-manifest-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const AddAssetHtmlWebpackPlugin = require("add-asset-html-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ParallelUglifyPlugin = require("webpack-parallel-uglify-plugin");
 const BundleAnalyzerWebpackPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
@@ -44,13 +42,6 @@ const prodConfig = {
     ],
   },
   plugins: [
-    new CopyWebpackPlugin([
-      // 复制静态资源到打包输出文件夹
-      {
-        from: path.resolve(__dirname, "./public"),
-        to: path.resolve(__dirname, "./dist"),
-      },
-    ]),
     new MiniCssExtractPlugin({
       filename: "[name].[hash:8].css",
       chunkFilename: "[id].[hash:8].css",
@@ -62,7 +53,6 @@ const prodConfig = {
       manifest: path.resolve(__dirname, "./dll/vendors.manifest.json"), // 读取dll打包后的manifest.json，分析需要跳过哪些库代码
     }),
     new ManifestWebpackPlugin(), // 在某些情况，index.html模板由后端渲染，那么我们就需要一份打包清单，知道打包后的文件对应的真正路径
-    new CleanWebpackPlugin(), // 生成前先清除dist目录
   ],
   optimization: {
     splitChunks: {

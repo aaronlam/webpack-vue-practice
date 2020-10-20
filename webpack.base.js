@@ -1,7 +1,11 @@
 const path = require("path");
 const webpack = require("webpack");
+
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
+
 const HappyPack = require("happypack");
 const os = require("os");
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
@@ -31,7 +35,7 @@ module.exports = {
       // },
       {
         test: /\.js$/,
-        loader: "happypack/loader?id=happyBabel", // 把js文件处理交给id为happyBabel的happypack的实例执行
+        use: ["cache-loader", "happypack/loader?id=happyBabel"], // 把js文件处理交给id为happyBabel的happypack的实例执行
         exclude: /node_modules/,
       },
       {
@@ -44,6 +48,13 @@ module.exports = {
     ],
   },
   plugins: [
+    new CopyWebpackPlugin([
+      // 复制静态资源到打包输出文件夹
+      {
+        from: path.resolve(__dirname, "./public"),
+        to: path.resolve(__dirname, "./dist"),
+      },
+    ]),
     new HtmlWebpackPlugin({
       template: "./src/index.html", // html模板位置
     }),
@@ -59,6 +70,7 @@ module.exports = {
       threadPool: happyThreadPool, // 共享进程池
       verbose: true, // 输出日志
     }),
+    new CleanWebpackPlugin(), // 生成前先清除dist目录
   ],
   resolve: {
     // 这里会影响到dllplugin的效果，会造成dll打一次，prod也打一次vue的包，造成重复打包
