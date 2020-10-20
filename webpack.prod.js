@@ -13,6 +13,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ParallelUglifyPlugin = require("webpack-parallel-uglify-plugin");
 const BundleAnalyzerWebpackPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
+const firstPlugin = require("./webpack-first-plugin");
 
 const prodConfig = {
   /*
@@ -44,6 +45,7 @@ const prodConfig = {
     ],
   },
   plugins: [
+    new firstPlugin(),
     new CopyWebpackPlugin([
       // 复制静态资源到打包输出文件夹
       {
