@@ -37,13 +37,22 @@ module.exports = {
       {
         test: /\.js$/,
         use: ["happypack/loader?id=happyBabel"], // 把js文件处理交给id为happyBabel的happypack的实例执行
-        exclude: /node_modules/,
+        // 也可以使用下面这种对象形式加载happypack
+        // {
+        //   loader: 'happypack/loader',
+        //   options: {
+        //     id: "happyBabel",
+        //   },
+        // },
+        include: path.resolve(__dirname, "./src"), // 只对src目录中的文件采用该loader配置
+        exclude: path.resolve(__dirname, "./node_modules"), // 排除node_modules目录下的文件采用该loader配置
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
-        loader: "file-loader",
+        test: /\.(gif|jpg|jpeg|png)$/,
+        loader: "url-loader",
         options: {
-          name: "[name].[ext]?[hash]",
+          name: "[name].[ext]?[hash:8]",
+          limit: 8192, // 文件大小小于该值（单位byte）时，会返回一个dataurl
         },
       },
     ],
@@ -69,11 +78,7 @@ module.exports = {
     new HappyPack({
       id: "happyBabel", // 与loader对应的id标识
       // 用法和loader配置一样，这里是loaders
-      loaders: [
-        {
-          loader: "babel-loader?cacheDirectory=true",
-        },
-      ],
+      loaders: ["babel-loader?cacheDirectory=true"],
       threadPool: happyThreadPool, // 共享进程池
       verbose: true, // 输出日志
     }),
@@ -84,6 +89,8 @@ module.exports = {
     // alias: {
     //   vue$: "vue/dist/vue.esm.js",
     // },
+    modules: [path.resolve(__dirname, "node_modules")], // 用于配置webpack去哪些目录下寻找第三方模块，默认是['node_modules']，但是他会先于当前目录的./node_modules去查找，发现不存在，再递归向上查找
+    extensions: [".jsx", ".js"], // 在导入没有带文件后缀时，webpack会自动带上后缀去尝试文件是否存在，而这里用于用于配置所尝试的后缀列表
   },
   externals: {
     //jquery: "jQuery", // 如果我们想引用一个库，但是又不想让webpack打包，并且又不影响我们在程序中以CMD、AMD或者window/global全局等方式进行使用，那就可以通过配置Externals

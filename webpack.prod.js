@@ -24,7 +24,7 @@ const prodConfig = {
     rules: [
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader"], // 生产环境需要单独提取css文件
       },
       {
         test: /\.scss$/,
@@ -61,7 +61,7 @@ const prodConfig = {
           },
           compress: {
             drop_console: true, // 是否删除代码中的console语句
-            collapse_vars: true, // 是否内嵌虽然已经定义了，但是只用到一次的变量
+            collapse_vars: true, // 是否内嵌虽然已经定义了，但是只用到一次的变量，比如将var x = 1; y = x;转换成y = 1
             reduce_vars: true, // 是否提取出现了多次，但是没有定义成变量去引用的静态值
           },
         },
